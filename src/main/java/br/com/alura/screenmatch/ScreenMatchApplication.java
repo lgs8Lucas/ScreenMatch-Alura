@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch;
 
+import br.com.alura.screenmatch.models.EpisodeData;
 import br.com.alura.screenmatch.models.SeriesData;
 import br.com.alura.screenmatch.services.APIConsumption;
 import br.com.alura.screenmatch.services.ConvertData;
@@ -18,8 +19,15 @@ public class ScreenMatchApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         var consumptionApi = new APIConsumption();
         var convertData = new ConvertData();
+
         var json = consumptionApi.getData("https://www.omdbapi.com/?t=peaky+blinders&apikey=fe961640");
         SeriesData series = convertData.getData(json, SeriesData.class);
         System.out.println(series);
+
+        json = consumptionApi.getData("https://www.omdbapi.com/?t=peaky+blinders&apikey=fe961640&season=1&episode=2");
+        EpisodeData episode = convertData.getData(json, EpisodeData.class);
+        System.out.println(episode);
+
+
     }
 }
