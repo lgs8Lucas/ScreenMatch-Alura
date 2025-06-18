@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.main;
 
+import br.com.alura.screenmatch.models.EpisodeData;
 import br.com.alura.screenmatch.models.SeasonData;
 import br.com.alura.screenmatch.models.SeriesData;
 import br.com.alura.screenmatch.services.APIConsumption;
@@ -27,7 +28,7 @@ public class Main {
 
         List<SeasonData> seasons = new ArrayList<>();
 
-        System.out.println(series);
+        System.out.println("Series: " + series.title());
 
         for (int i = 1; i <= series.totalSeason(); i++) {
             json = api.getData(URI + seriesName.replace(" ", "+") + "&season=" + i + API_KEY);
@@ -35,8 +36,12 @@ public class Main {
             seasons.add(season);
         }
 
-        seasons.forEach(System.out::println);
-
+        seasons.forEach( s -> {
+            System.out.println("Season: "+ s.number());
+            System.out.print("Episodes: [   ");
+            s.episodes().forEach( e -> System.out.print(e.title() + "   "));
+            System.out.println("]");
+        });
 
     }
 }
