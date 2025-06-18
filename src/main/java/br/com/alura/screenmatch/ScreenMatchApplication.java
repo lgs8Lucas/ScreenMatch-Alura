@@ -1,16 +1,9 @@
 package br.com.alura.screenmatch;
 
-import br.com.alura.screenmatch.models.EpisodeData;
-import br.com.alura.screenmatch.models.SeasonData;
-import br.com.alura.screenmatch.models.SeriesData;
-import br.com.alura.screenmatch.services.APIConsumption;
-import br.com.alura.screenmatch.services.ConvertData;
+import br.com.alura.screenmatch.main.Main;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class ScreenMatchApplication implements CommandLineRunner {
@@ -21,25 +14,7 @@ public class ScreenMatchApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        var consumptionApi = new APIConsumption();
-        var convertData = new ConvertData();
-
-        var json = consumptionApi.getData("https://www.omdbapi.com/?t=peaky+blinders&apikey=fe961640");
-        SeriesData series = convertData.getData(json, SeriesData.class);
-        System.out.println(series);
-        List<SeasonData> seasons = new ArrayList<>();
-
-        json = consumptionApi.getData("https://www.omdbapi.com/?t=peaky+blinders&apikey=fe961640&season=1&episode=2");
-        EpisodeData episode = convertData.getData(json, EpisodeData.class);
-        System.out.println(episode);
-
-        for (int i = 1; i <= series.totalSeason() ; i++) {
-            json = consumptionApi.getData("https://www.omdbapi.com/?t=peaky+blinders&apikey=fe961640&season="+i);
-            SeasonData season = convertData.getData(json, SeasonData.class);
-            seasons.add(season);
-        }
-
-        seasons.forEach(System.out::println);
-
+        Main main = new Main();
+        main.showMenu();
     }
 }
