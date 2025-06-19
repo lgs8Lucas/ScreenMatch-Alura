@@ -7,6 +7,8 @@ import br.com.alura.screenmatch.models.SeriesData;
 import br.com.alura.screenmatch.services.APIConsumption;
 import br.com.alura.screenmatch.services.ConvertData;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,21 +45,33 @@ public class Main {
             System.out.println("]");
         });
         //                                          Percorre a temporada e pega os episódios
-        List<EpisodeData> episodesData = seasons.stream().flatMap(s -> s.episodes().stream()).collect(Collectors.toList());
-
-        System.out.println("\nTop 5 episodes:");
-        episodesData.stream()
-                .filter(e -> !e.rating().equalsIgnoreCase(("N/A")))
-                .sorted(Comparator.comparing(EpisodeData::rating).reversed())
-                .limit(5)
-                .forEach(System.out::println);
-
         List<Episode> episodes = seasons.stream().flatMap(s -> s.episodes().stream()
                 .map(e -> new Episode(s.number(), e))
         ).collect(Collectors.toList());
 
-        episodes.forEach(System.out::println);
+        System.out.println("\nTop 5 episodes:");
+        episodes.stream()
+                .filter(e -> e.getRating() != 0)
+                .sorted(Comparator.comparing(Episode::getRating).reversed())
+                .limit(5)
+                .forEach(System.out::println);
 
+        System.out.println("From what year do you want to see the episodes? ");
+        var year = sc.nextInt();
+        sc.nextLine();
+
+        LocalDate searchDate = LocalDate.of(year, 1, 1);
+
+        DateTimeFormatter  formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        System.out.print("Episodes after "+ year+": ");
+        episodes.stream()
+                .filter(e -> e.getReleaseDate() != null &&  e.getReleaseDate().isAfter(searchDate))
+                .forEach(e -> System.out.println(
+                        "T"+ e.getSeason() +
+                                " E"+e.getNumber()+
+                                " Release Date: " + e.getReleaseDate().format(formatter)
+                ));
 
 
     }
