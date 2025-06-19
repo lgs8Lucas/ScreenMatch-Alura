@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.main;
 
+import br.com.alura.screenmatch.models.Episode;
 import br.com.alura.screenmatch.models.EpisodeData;
 import br.com.alura.screenmatch.models.SeasonData;
 import br.com.alura.screenmatch.models.SeriesData;
@@ -42,15 +43,20 @@ public class Main {
             System.out.println("]");
         });
         //                                          Percorre a temporada e pega os episódios
-        List<EpisodeData> episodes = seasons.stream().flatMap(s -> s.episodes().stream()).collect(Collectors.toList());
+        List<EpisodeData> episodesData = seasons.stream().flatMap(s -> s.episodes().stream()).collect(Collectors.toList());
 
         System.out.println("\nTop 5 episodes:");
-        episodes.stream()
+        episodesData.stream()
                 .filter(e -> !e.rating().equalsIgnoreCase(("N/A")))
                 .sorted(Comparator.comparing(EpisodeData::rating).reversed())
                 .limit(5)
                 .forEach(System.out::println);
 
+        List<Episode> episodes = seasons.stream().flatMap(s -> s.episodes().stream()
+                .map(e -> new Episode(s.number(), e))
+        ).collect(Collectors.toList());
+
+        episodes.forEach(System.out::println);
 
 
 
