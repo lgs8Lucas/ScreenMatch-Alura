@@ -6,14 +6,13 @@ import br.com.alura.screenmatch.models.SeriesData;
 import br.com.alura.screenmatch.services.APIConsumption;
 import br.com.alura.screenmatch.services.ConvertData;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
-    private Scanner sc = new Scanner(System.in);
-    private APIConsumption api = new APIConsumption();
-    private ConvertData convertData = new ConvertData();
+    private final Scanner sc = new Scanner(System.in);
+    private final APIConsumption api = new APIConsumption();
+    private final ConvertData convertData = new ConvertData();
 
     private final String URI = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=fe961640";
@@ -36,12 +35,24 @@ public class Main {
             seasons.add(season);
         }
 
-        seasons.forEach( s -> {
-            System.out.println("Season: "+ s.number());
+        seasons.forEach(s -> {
+            System.out.println("Season: " + s.number());
             System.out.print("Episodes: [   ");
-            s.episodes().forEach( e -> System.out.print(e.title() + "   "));
+            s.episodes().forEach(e -> System.out.print(e.title() + "   "));
             System.out.println("]");
         });
+        //                                          Percorre a temporada e pega os episódios
+        List<EpisodeData> episodes = seasons.stream().flatMap(s -> s.episodes().stream()).collect(Collectors.toList());
+
+        System.out.println("\nTop 5 episodes:");
+        episodes.stream()
+                .filter(e -> !e.rating().equalsIgnoreCase(("N/A")))
+                .sorted(Comparator.comparing(EpisodeData::rating).reversed())
+                .limit(5)
+                .forEach(System.out::println);
+
+
+
 
     }
 }
