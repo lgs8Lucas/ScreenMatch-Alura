@@ -1,7 +1,6 @@
 package br.com.alura.screenmatch.main;
 
 import br.com.alura.screenmatch.models.Episode;
-import br.com.alura.screenmatch.models.EpisodeData;
 import br.com.alura.screenmatch.models.SeasonData;
 import br.com.alura.screenmatch.models.SeriesData;
 import br.com.alura.screenmatch.services.APIConsumption;
@@ -49,14 +48,14 @@ public class Main {
                 .map(e -> new Episode(s.number(), e))
         ).collect(Collectors.toList());
 
-        System.out.println("\nTop 5 episodes:");
+        System.out.println("\nTop 10 episodes:");
         episodes.stream()
                 .filter(e -> e.getRating() != 0)
                 .sorted(Comparator.comparing(Episode::getRating).reversed())
-                .limit(5)
+                .limit(10)
                 .forEach(System.out::println);
 
-        System.out.println("From what year do you want to see the episodes? ");
+        System.out.print("From what year do you want to see the episodes? ");
         var year = sc.nextInt();
         sc.nextLine();
 
@@ -64,7 +63,7 @@ public class Main {
 
         DateTimeFormatter  formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        System.out.print("Episodes after "+ year+": ");
+        System.out.println("Episodes after "+ year+": ");
         episodes.stream()
                 .filter(e -> e.getReleaseDate() != null &&  e.getReleaseDate().isAfter(searchDate))
                 .forEach(e -> System.out.println(
@@ -72,6 +71,18 @@ public class Main {
                                 " E"+e.getNumber()+
                                 " Release Date: " + e.getReleaseDate().format(formatter)
                 ));
+
+        System.out.print("Which episode do you want to search for? ");
+        var ep = sc.nextLine();
+
+        var selectedEp = episodes.stream()
+                .filter(e -> e.getTitle().toLowerCase().contains(ep.toLowerCase()))
+                .findFirst(); // Retorna um optional
+        if (selectedEp.isPresent()) // Verifica se o episódio existe
+            System.out.println("Selected episode: "+selectedEp.get());
+        else
+            System.out.println("This episode don't exists");
+
 
 
     }
