@@ -55,35 +55,44 @@ public class Main {
                 .limit(10)
                 .forEach(System.out::println);
 
-        System.out.print("From what year do you want to see the episodes? ");
-        var year = sc.nextInt();
-        sc.nextLine();
-
-        LocalDate searchDate = LocalDate.of(year, 1, 1);
-
-        DateTimeFormatter  formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        System.out.println("Episodes after "+ year+": ");
-        episodes.stream()
-                .filter(e -> e.getReleaseDate() != null &&  e.getReleaseDate().isAfter(searchDate))
-                .forEach(e -> System.out.println(
-                        "T"+ e.getSeason() +
-                                " E"+e.getNumber()+
-                                " Release Date: " + e.getReleaseDate().format(formatter)
-                ));
-
-        System.out.print("Which episode do you want to search for? ");
-        var ep = sc.nextLine();
-
-        var selectedEp = episodes.stream()
-                .filter(e -> e.getTitle().toLowerCase().contains(ep.toLowerCase()))
-                .findFirst(); // Retorna um optional
-        if (selectedEp.isPresent()) // Verifica se o episódio existe
-            System.out.println("Selected episode: "+selectedEp.get());
-        else
-            System.out.println("This episode don't exists");
+//        System.out.print("From what year do you want to see the episodes? ");
+//        var year = sc.nextInt();
+//        sc.nextLine();
+//
+//        LocalDate searchDate = LocalDate.of(year, 1, 1);
+//
+//        DateTimeFormatter  formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//
+//        System.out.println("Episodes after "+ year+": ");
+//        episodes.stream()
+//                .filter(e -> e.getReleaseDate() != null &&  e.getReleaseDate().isAfter(searchDate))
+//                .forEach(e -> System.out.println(
+//                        "T"+ e.getSeason() +
+//                                " E"+e.getNumber()+
+//                                " Release Date: " + e.getReleaseDate().format(formatter)
+//                ));
 
 
+
+
+//        System.out.print("Which episode do you want to search for? ");
+//        var ep = sc.nextLine();
+//
+//        var selectedEp = episodes.stream()
+//                .filter(e -> e.getTitle().toLowerCase().contains(ep.toLowerCase()))
+//                .findFirst(); // Retorna um optional
+//        if (selectedEp.isPresent()) // Verifica se o episódio existe
+//            System.out.println("Selected episode: "+selectedEp.get());
+//        else
+//            System.out.println("This episode don't exists");
+
+        Map<Integer, Double> seasonRatings = episodes.stream()
+                .filter(e -> e.getRating() > 0.0) // Ignora avaliação nula
+                .collect(Collectors.groupingBy(Episode::getSeason, Collectors.averagingDouble(Episode::getRating)));
+                // gera um mapa de chave-valor, a chave é a temporada, o valor é a media de avaliação dos eps
+
+        System.out.println("Season Ratings:");
+        System.out.println(seasonRatings);
 
     }
 }
