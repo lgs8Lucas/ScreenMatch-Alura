@@ -73,8 +73,6 @@ public class Main {
 //                ));
 
 
-
-
 //        System.out.print("Which episode do you want to search for? ");
 //        var ep = sc.nextLine();
 //
@@ -89,10 +87,19 @@ public class Main {
         Map<Integer, Double> seasonRatings = episodes.stream()
                 .filter(e -> e.getRating() > 0.0) // Ignora avaliação nula
                 .collect(Collectors.groupingBy(Episode::getSeason, Collectors.averagingDouble(Episode::getRating)));
-                // gera um mapa de chave-valor, a chave é a temporada, o valor é a media de avaliação dos eps
+        // gera um mapa de chave-valor, a chave é a temporada, o valor é a media de avaliação dos eps
 
         System.out.println("Season Ratings:");
         System.out.println(seasonRatings);
+
+        DoubleSummaryStatistics sta = episodes.stream()
+                .filter(e -> e.getRating() > 0.0)
+                .collect(Collectors.summarizingDouble(Episode::getRating));
+        //                      Sobre o que quero fazer as estatísticas
+        System.out.println("Average: " + sta.getAverage());
+        System.out.println("Worst rating: " + sta.getMin());
+        System.out.println("Best rating: " + sta.getMax());
+        System.out.println("Number of rated episodes: " + episodes.size());
 
     }
 }
