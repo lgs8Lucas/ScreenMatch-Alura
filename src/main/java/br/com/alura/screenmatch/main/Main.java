@@ -1,11 +1,13 @@
 package br.com.alura.screenmatch.main;
 
 import br.com.alura.screenmatch.models.SeasonData;
+import br.com.alura.screenmatch.models.Series;
 import br.com.alura.screenmatch.models.SeriesData;
 import br.com.alura.screenmatch.services.APIConsumption;
 import br.com.alura.screenmatch.services.ConvertData;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
     private final Scanner sc = new Scanner(System.in);
@@ -15,7 +17,7 @@ public class Main {
     private final String URI = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=fe961640";
 
-    private List<SeriesData> series = new ArrayList<SeriesData>();
+    private List<SeriesData> seriesData = new ArrayList<SeriesData>();
 
     public void showMenu() {
         var option = 1;
@@ -51,7 +53,10 @@ public class Main {
     }
 
     private void showHistory() {
-        series.forEach(System.out::println);
+        List<Series> series = seriesData.stream().map(Series::new).collect(Collectors.toList());
+        series.stream()
+                .sorted(Comparator.comparing(Series::getGenre))
+                .forEach(System.out::println);
     }
 
     private SeriesData getSeriesData() {
@@ -63,7 +68,7 @@ public class Main {
 
     private void searchSeriesWeb(){
         SeriesData data = getSeriesData();
-        series.add(data);
+        seriesData.add(data);
         System.out.println(data);
     }
 
