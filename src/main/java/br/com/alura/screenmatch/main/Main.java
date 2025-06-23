@@ -5,6 +5,7 @@ import br.com.alura.screenmatch.models.Series;
 import br.com.alura.screenmatch.models.SeriesData;
 import br.com.alura.screenmatch.services.APIConsumption;
 import br.com.alura.screenmatch.services.ConvertData;
+import br.com.alura.screenmatch.services.Keys;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,7 +16,7 @@ public class Main {
     private final ConvertData convertData = new ConvertData();
 
     private final String URI = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=fe961640";
+    private final String API_KEY = "&apikey="+ Keys.OMDB_KEY;
 
     private List<SeriesData> seriesData = new ArrayList<SeriesData>();
 

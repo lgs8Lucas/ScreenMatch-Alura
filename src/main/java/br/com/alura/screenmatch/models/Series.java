@@ -1,5 +1,9 @@
 package br.com.alura.screenmatch.models;
 
+import br.com.alura.screenmatch.services.GPTQuery;
+import br.com.alura.screenmatch.services.GeminiQuery;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
@@ -12,6 +16,7 @@ public class Series {
     private List<String> actors;
     private String urlPoster;
     private String plot;
+    private String portuguesePlot;
 
     public Series(SeriesData seriesData) {
         this.title = seriesData.title();
@@ -21,6 +26,11 @@ public class Series {
         this.urlPoster = seriesData.urlPoster();
         this.plot = seriesData.plot();
         this.genre = Genre.fromString(seriesData.genre().split(",")[0]);
+        try {
+            this.portuguesePlot = GeminiQuery.getData(this.plot).trim();
+        } catch (IOException e) {
+            this.portuguesePlot = "N/A";
+        }
     }
 
     public String getTitle() {
@@ -87,6 +97,8 @@ public class Series {
                 ", rating=" + rating +
                 ", actors=" + actors +
                 ", urlPoster='" + urlPoster + '\'' +
-                ", plot='" + plot + '\'';
+                ", plot='" + plot + '\'' +
+                ", portuguese plot='" + portuguesePlot + '\'';
+
     }
 }
