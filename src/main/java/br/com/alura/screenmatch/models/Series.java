@@ -2,16 +2,25 @@ package br.com.alura.screenmatch.models;
 
 import br.com.alura.screenmatch.services.GPTQuery;
 import br.com.alura.screenmatch.services.GeminiQuery;
+import jakarta.persistence.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.OptionalDouble;
 
+
+@Entity // Informa que será uma tabela no banco.
+//@Table(name = "series")// Definindo o nome da tabela;
 public class Series {
+    @Id // Cria o ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(unique = true) // Deixa o título como único
     private String title;
     private Integer totalSeason;
     private double rating;
+    @Enumerated(EnumType.STRING) // Define com um enum
     private Genre genre;
     private List<String> actors;
     private String urlPoster;
@@ -31,6 +40,10 @@ public class Series {
         } catch (IOException e) {
             this.portuguesePlot = "N/A";
         }
+    }
+
+    public Series() {
+
     }
 
     public String getTitle() {
@@ -87,6 +100,23 @@ public class Series {
 
     public void setPlot(String plot) {
         this.plot = plot;
+        try {
+            this.portuguesePlot = GeminiQuery.getData(this.plot).trim();
+        } catch (IOException e) {
+            this.portuguesePlot = "N/A";
+        }
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getPortuguesePlot() {
+        return portuguesePlot;
     }
 
     @Override
