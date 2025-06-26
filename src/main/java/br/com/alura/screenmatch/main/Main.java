@@ -20,8 +20,6 @@ public class Main {
     private final String URI = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey="+ Keys.OMDB_KEY;
 
-    private List<SeriesData> seriesData = new ArrayList<SeriesData>();
-
     SerieRepository repository;
 
     public Main(SerieRepository repository) {
@@ -62,7 +60,7 @@ public class Main {
     }
 
     private void showHistory() {
-        List<Series> series = seriesData.stream().map(Series::new).collect(Collectors.toList());
+        List<Series> series = repository.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Series::getGenre))
                 .forEach(System.out::println);
@@ -77,7 +75,6 @@ public class Main {
 
     private void searchSeriesWeb(){
         Series data = new Series(getSeriesData());
-        //seriesData.add(data);
         repository.save(data);
         System.out.println(data);
     }
