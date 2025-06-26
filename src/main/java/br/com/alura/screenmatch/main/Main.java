@@ -3,9 +3,11 @@ package br.com.alura.screenmatch.main;
 import br.com.alura.screenmatch.models.SeasonData;
 import br.com.alura.screenmatch.models.Series;
 import br.com.alura.screenmatch.models.SeriesData;
+import br.com.alura.screenmatch.repository.SerieRepository;
 import br.com.alura.screenmatch.services.APIConsumption;
 import br.com.alura.screenmatch.services.ConvertData;
 import br.com.alura.screenmatch.services.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,9 +22,15 @@ public class Main {
 
     private List<SeriesData> seriesData = new ArrayList<SeriesData>();
 
+    SerieRepository repository;
+
+    public Main(SerieRepository repository) {
+        this.repository = repository;
+    }
+
     public void showMenu() {
         var option = 1;
-        while (option != 0) {
+        while (true) {
             var menu = """
                 1 - Search Series
                 2 - Search Episodes
@@ -68,8 +76,9 @@ public class Main {
     }
 
     private void searchSeriesWeb(){
-        SeriesData data = getSeriesData();
-        seriesData.add(data);
+        Series data = new Series(getSeriesData());
+        //seriesData.add(data);
+        repository.save(data);
         System.out.println(data);
     }
 

@@ -5,6 +5,7 @@ import br.com.alura.screenmatch.services.GeminiQuery;
 import jakarta.persistence.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
 
@@ -26,6 +27,8 @@ public class Series {
     private String urlPoster;
     private String plot;
     private String portuguesePlot;
+    @Transient
+    private List<Episode> episodes = new ArrayList<>();
 
     public Series(SeriesData seriesData) {
         this.title = seriesData.title();
@@ -117,6 +120,14 @@ public class Series {
 
     public String getPortuguesePlot() {
         return portuguesePlot;
+    }
+
+    public List<Episode> getEpisodes() {
+        return episodes;
+    }
+
+    public void setEpisodes(List<Episode> episodes) {
+        this.episodes = episodes;
     }
 
     @Override
