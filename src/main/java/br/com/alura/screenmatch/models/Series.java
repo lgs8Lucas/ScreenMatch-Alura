@@ -26,7 +26,8 @@ public class Series {
     private String urlPoster;
     private String plot;
     private String portuguesePlot;
-    @Transient
+
+    @OneToMany(mappedBy = "series")
     private List<Episode> episodes = new ArrayList<>();
 
     public Series(SeriesData seriesData) {

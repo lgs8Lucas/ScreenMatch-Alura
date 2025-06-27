@@ -1,14 +1,25 @@
 package br.com.alura.screenmatch.models;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.CascadeType;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+@Entity
+@Table(name = "episodes")
 public class Episode {
     private Integer season;
     private String title;
     private Integer number;
     private double rating;
     private LocalDate releaseDate;
+
+    @ManyToOne
+    private Series series;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     public Episode(Integer season, EpisodeData e) {
         this.season = season;
@@ -24,6 +35,10 @@ public class Episode {
         } catch (DateTimeParseException exception){
             this.releaseDate = null;
         }
+    }
+
+    public Episode() {
+
     }
 
     public Integer getSeason() {
@@ -69,5 +84,21 @@ public class Episode {
     @Override
     public String toString() {
         return "Episode: "+title+", T"+season+" E"+number+", Rating: "+rating+", Release date: "+releaseDate;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Series getSeries() {
+        return series;
+    }
+
+    public void setSeries(Series series) {
+        this.series = series;
     }
 }
