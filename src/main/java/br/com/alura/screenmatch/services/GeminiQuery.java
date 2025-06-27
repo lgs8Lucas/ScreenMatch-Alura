@@ -6,7 +6,7 @@ import okhttp3.*;
 import java.io.IOException;
 
 public class GeminiQuery {
-    private static  String apiKey = Keys.GEMINI_KEY;
+    private static  String apiKey = System.getenv("GEMINI_KEY");
     private static String ENDPOINT = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=" + apiKey;
 
     public static String getData(String texto) throws IOException {

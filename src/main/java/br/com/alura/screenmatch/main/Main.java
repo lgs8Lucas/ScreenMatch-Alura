@@ -6,11 +6,8 @@ import br.com.alura.screenmatch.models.SeriesData;
 import br.com.alura.screenmatch.repository.SerieRepository;
 import br.com.alura.screenmatch.services.APIConsumption;
 import br.com.alura.screenmatch.services.ConvertData;
-import br.com.alura.screenmatch.services.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     private final Scanner sc = new Scanner(System.in);
@@ -18,7 +15,7 @@ public class Main {
     private final ConvertData convertData = new ConvertData();
 
     private final String URI = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey="+ Keys.OMDB_KEY;
+    private final String API_KEY = "&apikey="+ System.getenv("OMDB_KEY");
 
     SerieRepository repository;
 

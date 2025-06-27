@@ -1,6 +1,5 @@
 package br.com.alura.screenmatch.models;
 
-import br.com.alura.screenmatch.services.GPTQuery;
 import br.com.alura.screenmatch.services.GeminiQuery;
 import jakarta.persistence.*;
 
