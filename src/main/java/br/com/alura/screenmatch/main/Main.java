@@ -1,5 +1,6 @@
 package br.com.alura.screenmatch.main;
 
+import br.com.alura.screenmatch.models.Episode;
 import br.com.alura.screenmatch.models.SeasonData;
 import br.com.alura.screenmatch.models.Series;
 import br.com.alura.screenmatch.models.SeriesData;
@@ -22,6 +23,7 @@ public class Main {
     public Main(SerieRepository repository) {
         this.repository = repository;
     }
+    private List<Series> series = new ArrayList<>();
 
     public void showMenu() {
         var option = 1;
@@ -57,7 +59,7 @@ public class Main {
     }
 
     private void showHistory() {
-        List<Series> series = repository.findAll();
+        series = repository.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Series::getGenre))
                 .forEach(System.out::println);
@@ -77,13 +79,35 @@ public class Main {
     }
 
     private void searchEpisodeForSerie() {
-        SeriesData data = getSeriesData();
-        List<SeasonData> seasons = new ArrayList<>();
+        showHistory();
+        System.out.print("Type Series Name: ");
+        String seriesName = sc.nextLine();
 
-        for (int i = 1; i <= data.totalSeason() ; i++) {
-            var json = api.getData(URI + data.title().replace(" ", "+")+"&season="+i+API_KEY);
-            seasons.add(convertData.getData(json, SeasonData.class));
+        Optional<Series> first = series.stream()
+                .filter(s -> s.getTitle().toLowerCase().contains(seriesName.toLowerCase()))
+                .findFirst();
+        if (first.isPresent()) {
+            var data = first.get();
+            List<SeasonData> seasons = new ArrayList<>();
+            for (int i = 1; i <= data.getTotalSeason() ; i++) {
+                var json = api.getData(URI + data.getTitle().replace(" ", "+")+"&season="+i+API_KEY);
+                seasons.add(convertData.getData(json, SeasonData.class));
+            }
+            seasons.forEach(System.out::println);
+
+            List<Episode> episodes = seasons.stream()
+                    .flatMap(s -> s.episodes().stream()
+                            .map(e -> new Episode(s.number(), e)))
+                    .toList();
+
+            data.setEpisodes(episodes); // Alterando localmente
+            
+
+            return;
         }
-        seasons.forEach(System.out::println);
+        System.out.println("Series Not Found");
+
+
+
     }
 }
