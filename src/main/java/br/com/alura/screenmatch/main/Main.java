@@ -31,7 +31,8 @@ public class Main {
             var menu = """
                 1 - Search Series
                 2 - Search Episodes
-                3 - Show History
+                3 - List All Series
+                4 - Search Series By Title
                 
                 0 - Exit
                 """;
@@ -47,7 +48,10 @@ public class Main {
                     searchEpisodeForSerie();
                     break;
                 case 3:
-                    showHistory();
+                    listAllSeries();
+                    break;
+                case 4:
+                    searchSeriesByTitle();
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -58,7 +62,7 @@ public class Main {
         }
     }
 
-    private void showHistory() {
+    private void listAllSeries() {
         series = repository.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Series::getGenre))
@@ -79,15 +83,13 @@ public class Main {
     }
 
     private void searchEpisodeForSerie() {
-        showHistory();
+        listAllSeries();
         System.out.print("Type Series Name: ");
         String seriesName = sc.nextLine();
 
-        Optional<Series> first = series.stream()
-                .filter(s -> s.getTitle().toLowerCase().contains(seriesName.toLowerCase()))
-                .findFirst();
-        if (first.isPresent()) {
-            var data = first.get();
+        Optional<Series> searchedSerie = repository.findByTitleContainingIgnoreCase(seriesName);
+        if (searchedSerie.isPresent()) {
+            var data = searchedSerie.get();
             List<SeasonData> seasons = new ArrayList<>();
             for (int i = 1; i <= data.getTotalSeason() ; i++) {
                 var json = api.getData(URI + data.getTitle().replace(" ", "+")+"&season="+i+API_KEY);
@@ -106,8 +108,16 @@ public class Main {
             return;
         }
         System.out.println("Series Not Found");
+    }
 
-
-
+    private void searchSeriesByTitle() {
+        System.out.print("Type Series Name: ");
+        String seriesName = sc.nextLine();
+        Optional<Series> searchedSerie = repository.findByTitleContainingIgnoreCase(seriesName);
+        if (searchedSerie.isPresent()) {
+            System.out.println("Series data: " + searchedSerie.get());
+        } else {
+            System.out.println("Series Not Found");
+        }
     }
 }
