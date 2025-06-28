@@ -23,7 +23,7 @@ public class GeminiQuery {
              }
            ]
          }
-    """.formatted(texto);
+    """.formatted(texto.replace('"', '`'));
 
         RequestBody body = RequestBody.create(
                 MediaType.parse("application/json"),
@@ -47,7 +47,7 @@ public class GeminiQuery {
                 System.err.println("Corpo da Requisição Enviado: " + json);
                 System.err.println("Mensagem do Servidor: " + errorBody);
                 System.err.println("-------------------------");
-                return "Erro: " + response.code() + " - Detalhes: " + errorBody;
+                throw new IOException("Erro ao executar API GEMINI");
             }
 
             // AQUI ESTÁ A MUDANÇA PRINCIPAL!

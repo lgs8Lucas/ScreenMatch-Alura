@@ -27,7 +27,7 @@ public class Series {
     private String plot;
     private String portuguesePlot;
 
-    @OneToMany(mappedBy = "series")
+    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episode> episodes = new ArrayList<>();
 
     public Series(SeriesData seriesData) {
@@ -127,6 +127,7 @@ public class Series {
     }
 
     public void setEpisodes(List<Episode> episodes) {
+        episodes.forEach(episode -> episode.setSeries(this)); // Define a série dele para esta série para salvar a chave secundária.
         this.episodes = episodes;
     }
 
@@ -139,7 +140,8 @@ public class Series {
                 ", actors=" + actors +
                 ", urlPoster='" + urlPoster + '\'' +
                 ", plot='" + plot + '\'' +
-                ", portuguese plot='" + portuguesePlot + '\'';
+                ", portuguese plot='" + portuguesePlot + '\'' +
+                ", episodes='" + episodes +  '\'';
 
     }
 }

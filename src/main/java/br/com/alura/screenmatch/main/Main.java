@@ -101,7 +101,7 @@ public class Main {
                     .toList();
 
             data.setEpisodes(episodes); // Alterando localmente
-            
+            repository.save(data);
 
             return;
         }
