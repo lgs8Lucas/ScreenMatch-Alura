@@ -33,7 +33,7 @@ public class Main {
                 2 - Search Episodes
                 3 - List All Series
                 4 - Search Series By Title
-                
+                5 - Search Series By Actor
                 0 - Exit
                 """;
             System.out.println(menu);
@@ -52,6 +52,9 @@ public class Main {
                     break;
                 case 4:
                     searchSeriesByTitle();
+                    break;
+                case 5:
+                    searchSeriesByActor();
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -118,6 +121,23 @@ public class Main {
             System.out.println("Series data: " + searchedSerie.get());
         } else {
             System.out.println("Series Not Found");
+        }
+    }
+
+    private void searchSeriesByActor() {
+        System.out.print("Type Actor Name: ");
+        String actor = sc.nextLine();
+        System.out.print("Type min rating: ");
+        double rating = sc.nextDouble();
+        sc.nextLine();
+        List<Series> SeriesFounded = repository.findByActorsContainingIgnoreCaseAndRatingAfter(actor, rating);
+        if (SeriesFounded.isEmpty()) {
+            System.out.println("Series Not Found");
+        } else  {
+            System.out.println("Series with "+ actor+" With rating better than "+rating);
+            SeriesFounded.forEach(s->{
+                System.out.println(s.getTitle() + " - " + s.getGenre() + " | " + s.getRating());
+            });
         }
     }
 }

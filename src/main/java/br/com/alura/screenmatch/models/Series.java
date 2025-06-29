@@ -22,7 +22,7 @@ public class Series {
     private double rating;
     @Enumerated(EnumType.STRING) // Define com um enum
     private Genre genre;
-    private List<String> actors;
+    private String actors;
     private String urlPoster;
     private String plot;
     private String portuguesePlot;
@@ -34,7 +34,7 @@ public class Series {
         this.title = seriesData.title();
         this.totalSeason = seriesData.totalSeason();
         this.rating = OptionalDouble.of(Double.parseDouble(seriesData.rating())).orElse(0.0);
-        this.actors = List.of(seriesData.actors().split(", "));
+        this.actors = seriesData.actors();
         this.urlPoster = seriesData.urlPoster();
         this.plot = seriesData.plot();
         this.genre = Genre.fromString(seriesData.genre().split(",")[0]);
@@ -81,11 +81,11 @@ public class Series {
         this.genre = genre;
     }
 
-    public List<String> getActors() {
+    public String getActors() {
         return actors;
     }
 
-    public void setActors(List<String> actors) {
+    public void setActors(String actors) {
         this.actors = actors;
     }
 
