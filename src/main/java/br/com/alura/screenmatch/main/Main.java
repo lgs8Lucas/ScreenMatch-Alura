@@ -130,7 +130,7 @@ public class Main {
         System.out.print("Type min rating: ");
         double rating = sc.nextDouble();
         sc.nextLine();
-        List<Series> SeriesFounded = repository.findByActorsContainingIgnoreCaseAndRatingAfter(actor, rating);
+        List<Series> SeriesFounded = repository.findByActorsContainingIgnoreCaseAndRatingGreaterThanEqual(actor, rating);
         if (SeriesFounded.isEmpty()) {
             System.out.println("Series Not Found");
         } else  {
