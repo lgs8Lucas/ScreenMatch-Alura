@@ -33,6 +33,7 @@ public class Main {
                 5 - Search Series By Actor
                 6 - Top 5 Series
                 7 - Search By Portuguese Genre
+                8 - Search By Number Of Seasons and Rating
                 
                 0 - Exit
                 """;
@@ -61,6 +62,9 @@ public class Main {
                     break;
                 case 7:
                     searchSeriesByGenre();
+                    break;
+                case 8:
+                    searchSeriesByTotalSeasonsAndRating();
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -172,6 +176,23 @@ public class Main {
         seriesFounded.forEach(s->{
             System.out.println(s.getTitle() + " - " + s.getGenre() + " | " + s.getRating());
         });
+    }
 
+    private void searchSeriesByTotalSeasonsAndRating() {
+        System.out.print("Type max number of seasons: ");
+        Integer maxSeasons = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Type min rating: ");
+        Double minRating = sc.nextDouble();
+        sc.nextLine();
+        List<Series> seriesFounded = repository.findByTotalSeasonLessThanEqualAndRatingGreaterThanEqual(maxSeasons, minRating);
+        if (seriesFounded.isEmpty()) {
+            System.out.println("Series Not Found");
+            return;
+        }
+        System.out.println("Series: ");
+        seriesFounded.forEach(s->{
+            System.out.println(s.getTitle() + " - " + s.getGenre() + " | " + s.getRating());
+        });
     }
 }
