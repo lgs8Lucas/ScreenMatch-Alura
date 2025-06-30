@@ -1,9 +1,6 @@
 package br.com.alura.screenmatch.main;
 
-import br.com.alura.screenmatch.models.Episode;
-import br.com.alura.screenmatch.models.SeasonData;
-import br.com.alura.screenmatch.models.Series;
-import br.com.alura.screenmatch.models.SeriesData;
+import br.com.alura.screenmatch.models.*;
 import br.com.alura.screenmatch.repository.SerieRepository;
 import br.com.alura.screenmatch.services.APIConsumption;
 import br.com.alura.screenmatch.services.ConvertData;
@@ -34,6 +31,9 @@ public class Main {
                 3 - List All Series
                 4 - Search Series By Title
                 5 - Search Series By Actor
+                6 - Top 5 Series
+                7 - Search By Portuguese Genre
+                
                 0 - Exit
                 """;
             System.out.println(menu);
@@ -55,6 +55,12 @@ public class Main {
                     break;
                 case 5:
                     searchSeriesByActor();
+                    break;
+                case 6:
+                    searchTop5Series();
+                    break;
+                case 7:
+                    searchSeriesByGenre();
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -139,5 +145,33 @@ public class Main {
                 System.out.println(s.getTitle() + " - " + s.getGenre() + " | " + s.getRating());
             });
         }
+    }
+
+    private void searchTop5Series() {
+        List<Series> top5 = repository.findTop5ByOrderByRatingDesc();
+        if (top5.isEmpty()) {
+            System.out.println("Series Not Found");
+        }else {
+            System.out.println("Top 5 Series:");
+            top5.forEach(s->{
+                System.out.println(s.getTitle() + " - " + s.getGenre() + " | " + s.getRating());
+            });
+        }
+    }
+
+    private void searchSeriesByGenre() {
+        System.out.print("Type Genre: ");
+        String ptGenre = sc.nextLine();
+        Genre genre = Genre.fromPortuguese(ptGenre);
+        List<Series> seriesFounded = repository.findByGenre(genre);
+        if (seriesFounded.isEmpty()) {
+            System.out.println("Series Not Found");
+            return;
+        }
+        System.out.println("Series of portuguese genre "+ptGenre);
+        seriesFounded.forEach(s->{
+            System.out.println(s.getTitle() + " - " + s.getGenre() + " | " + s.getRating());
+        });
+
     }
 }
