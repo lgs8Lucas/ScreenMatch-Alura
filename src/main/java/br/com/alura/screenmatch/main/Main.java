@@ -185,7 +185,7 @@ public class Main {
         System.out.print("Type min rating: ");
         Double minRating = sc.nextDouble();
         sc.nextLine();
-        List<Series> seriesFounded = repository.findByTotalSeasonLessThanEqualAndRatingGreaterThanEqual(maxSeasons, minRating);
+        List<Series> seriesFounded = repository.seriesBySeasonsAndRating(maxSeasons, minRating);
         if (seriesFounded.isEmpty()) {
             System.out.println("Series Not Found");
             return;
