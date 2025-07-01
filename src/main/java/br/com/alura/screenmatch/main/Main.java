@@ -34,6 +34,7 @@ public class Main {
                 6 - Top 5 Series
                 7 - Search By Portuguese Genre
                 8 - Search By Number Of Seasons and Rating
+                9 - Search Episode By Excerpt
                 
                 0 - Exit
                 """;
@@ -65,6 +66,9 @@ public class Main {
                     break;
                 case 8:
                     searchSeriesByTotalSeasonsAndRating();
+                    break;
+                case 9:
+                    searchEpisodeByExcerpt();
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -194,5 +198,21 @@ public class Main {
         seriesFounded.forEach(s->{
             System.out.println(s.getTitle() + " - " + s.getGenre() + " | " + s.getRating());
         });
+    }
+
+    private void searchEpisodeByExcerpt(){
+        System.out.print("Type Episode Name: ");
+        String excerptEpisode = sc.nextLine();
+        List<Episode> episodes = repository.episodesByExcerpt(excerptEpisode);
+        if (episodes.isEmpty()) {
+            System.out.println("Episode Not Found");
+            return;
+        }
+        System.out.println("Episodes: ");
+        episodes.forEach(e->{
+            System.out.printf("Series: %s  Season %s  -  Episode %s  -  %s\n",
+                    e.getSeries().getTitle(), e.getSeason(), e.getNumber(), e.getTitle());
+        });
+        System.out.println("Type Series Name: ");
     }
 }
