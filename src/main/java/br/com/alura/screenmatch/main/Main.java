@@ -21,6 +21,8 @@ public class Main {
         this.repository = repository;
     }
     private List<Series> series = new ArrayList<>();
+    private Optional<Series> searchedSerie = Optional.empty();
+
 
     public void showMenu() {
         var option = 1;
@@ -35,6 +37,7 @@ public class Main {
                 7 - Search By Portuguese Genre
                 8 - Search By Number Of Seasons and Rating
                 9 - Search Episode By Excerpt
+                10 - Top 5 episodes of the series
                 
                 0 - Exit
                 """;
@@ -69,6 +72,9 @@ public class Main {
                     break;
                 case 9:
                     searchEpisodeByExcerpt();
+                    break;
+                case 10:
+                    top5EpisodesForSries();
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -130,7 +136,7 @@ public class Main {
     private void searchSeriesByTitle() {
         System.out.print("Type Series Name: ");
         String seriesName = sc.nextLine();
-        Optional<Series> searchedSerie = repository.findByTitleContainingIgnoreCase(seriesName);
+        searchedSerie = repository.findByTitleContainingIgnoreCase(seriesName);
         if (searchedSerie.isPresent()) {
             System.out.println("Series data: " + searchedSerie.get());
         } else {
@@ -214,5 +220,23 @@ public class Main {
                     e.getSeries().getTitle(), e.getSeason(), e.getNumber(), e.getTitle());
         });
         System.out.println("Type Series Name: ");
+    }
+
+    private void top5EpisodesForSries(){
+        searchSeriesByTitle();
+        if (searchedSerie.isPresent()) {
+            var data = searchedSerie.get();
+            List<Episode> episodes = data.getEpisodes();
+            if (episodes.isEmpty()) {
+                System.out.println("No episodes found for this series");
+                return;
+            }
+            List<Episode> top5 = repository.topEpisodesForSeries(data);
+            System.out.println("Top 5 Episodes for "+data.getTitle()+": ");
+            top5.forEach(e->{
+                System.out.printf("Season %s  -  Episode %s  -  %s  |  Rating: %s\n",
+                        e.getSeason(), e.getNumber(), e.getTitle(), e.getRating());
+            });
+        }
     }
 }
