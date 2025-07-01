@@ -38,6 +38,7 @@ public class Main {
                 8 - Search By Number Of Seasons and Rating
                 9 - Search Episode By Excerpt
                 10 - Top 5 episodes of the series
+                11 - Search Episodes By Date
                 
                 0 - Exit
                 """;
@@ -75,6 +76,9 @@ public class Main {
                     break;
                 case 10:
                     top5EpisodesForSries();
+                    break;
+                case 11:
+                    searchEpisodesByDate();
                     break;
                 case 0:
                     System.out.println("Exiting...");
@@ -236,6 +240,31 @@ public class Main {
             top5.forEach(e->{
                 System.out.printf("Season %s  -  Episode %s  -  %s  |  Rating: %s\n",
                         e.getSeason(), e.getNumber(), e.getTitle(), e.getRating());
+            });
+        }
+    }
+
+    private void searchEpisodesByDate(){
+        searchSeriesByTitle();
+        if (searchedSerie.isPresent()) {
+            var data = searchedSerie.get();
+            if (data.getEpisodes().isEmpty()) {
+                System.out.println("No episodes found for this series");
+                return;
+            }
+            System.out.print("Type limit year: ");
+            int limitYear = sc.nextInt();
+            sc.nextLine();
+
+            List<Episode> episodes = repository.episodesBySeriesAndYear(data, limitYear);
+            if (episodes.isEmpty()) {
+                System.out.println("Episodes not found for this series in the year "+limitYear+" or upper");
+                return;
+            }
+            System.out.println("Episodes:");
+            episodes.forEach(e->{
+                System.out.printf("Season %s  -  Episode %s  -  %s  |  Rating: %s  -  %s\n",
+                        e.getSeason(), e.getNumber(), e.getTitle(), e.getRating(), e.getReleaseDate().getYear());
             });
         }
     }
