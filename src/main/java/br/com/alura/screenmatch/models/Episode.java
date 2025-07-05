@@ -101,4 +101,6 @@ public class Episode {
     public void setSeries(Series series) {
         this.series = series;
     }
+
+
 }

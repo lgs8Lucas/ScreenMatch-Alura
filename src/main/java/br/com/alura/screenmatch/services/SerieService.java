@@ -13,6 +13,10 @@ public class SerieService {
     @Autowired
     private SerieRepository repository; // Para acesso ao banco de dados
 
+    private List<SerieDTO> convertSeriesToDTO(List<Series> series){
+        return series.stream().map(SerieDTO::new).toList();
+    }
+
     public List<SerieDTO> getAllSeries(){
         return convertSeriesToDTO(repository.findAll());
     }
@@ -21,7 +25,7 @@ public class SerieService {
         return convertSeriesToDTO(repository.findTop5ByOrderByRatingDesc());
     }
 
-    private List<SerieDTO> convertSeriesToDTO(List<Series> series){
-        return series.stream().map(SerieDTO::new).toList();
+    public List<SerieDTO> getTop5ReleasedSeries() {
+        return convertSeriesToDTO(repository.top5LastSeries());
     }
 }
