@@ -28,4 +28,9 @@ public class SerieService {
     public List<SerieDTO> getTop5ReleasedSeries() {
         return convertSeriesToDTO(repository.top5LastSeries());
     }
+
+    public SerieDTO getSeriesById(Long id) {
+        var opt = repository.findById(id);
+        return opt.map(SerieDTO::new).orElse(null); // Se achar retorna, senão, null
+    }
 }

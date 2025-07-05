@@ -82,7 +82,7 @@ public class Series {
     }
 
     public String getActors() {
-        return actors;
+        return actors.replace("{", "").replace("}", " ").replaceAll("\"", " ");
     }
 
     public void setActors(String actors) {
