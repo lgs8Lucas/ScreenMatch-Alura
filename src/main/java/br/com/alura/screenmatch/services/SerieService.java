@@ -2,6 +2,7 @@ package br.com.alura.screenmatch.services;
 
 import br.com.alura.screenmatch.dto.EpisodeDTO;
 import br.com.alura.screenmatch.dto.SerieDTO;
+import br.com.alura.screenmatch.models.Episode;
 import br.com.alura.screenmatch.models.Series;
 import br.com.alura.screenmatch.repository.SerieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,10 @@ public class SerieService {
 
     private List<SerieDTO> convertSeriesToDTO(List<Series> series){
         return series.stream().map(SerieDTO::new).toList();
+    }
+
+    private List<EpisodeDTO> convertEpisodestoDTO(List<Episode> episodes){
+        return episodes.stream().map(EpisodeDTO::new).toList();
     }
 
     public List<SerieDTO> getAllSeries(){
@@ -37,6 +42,11 @@ public class SerieService {
 
     public List<EpisodeDTO> getAllSeasons(Long id) {
         var opt = repository.findById(id);
-        return opt.map(series -> series.getEpisodes().stream().map(EpisodeDTO::new).toList()).orElse(null);
+        return opt.map(series -> convertEpisodestoDTO(series.getEpisodes())).orElse(null);
+    }
+
+
+    public List<EpisodeDTO> getSeason(Long serie, Integer season) {
+        return convertEpisodestoDTO(repository.episodesBySeriesAndSeason(serie, season));
     }
 }
