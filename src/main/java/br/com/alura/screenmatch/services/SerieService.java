@@ -56,4 +56,10 @@ public class SerieService {
         Genre g = Genre.fromPortuguese(genre);
         return convertSeriesToDTO(repository.findByGenre(g));
     }
+
+
+    public List<EpisodeDTO> getTopEpisodesBySeries(Long id) {
+        var opt = repository.findById(id);
+        return opt.map(s -> convertEpisodestoDTO(repository.topEpisodesForSeries(s))).orElse(null);
+    }
 }
