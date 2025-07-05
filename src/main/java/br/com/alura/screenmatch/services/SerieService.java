@@ -3,9 +3,11 @@ package br.com.alura.screenmatch.services;
 import br.com.alura.screenmatch.dto.EpisodeDTO;
 import br.com.alura.screenmatch.dto.SerieDTO;
 import br.com.alura.screenmatch.models.Episode;
+import br.com.alura.screenmatch.models.Genre;
 import br.com.alura.screenmatch.models.Series;
 import br.com.alura.screenmatch.repository.SerieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,5 +50,10 @@ public class SerieService {
 
     public List<EpisodeDTO> getSeason(Long serie, Integer season) {
         return convertEpisodestoDTO(repository.episodesBySeriesAndSeason(serie, season));
+    }
+
+    public List<SerieDTO> getSeriesByGenre(String genre) {
+        Genre g = Genre.fromPortuguese(genre);
+        return convertSeriesToDTO(repository.findByGenre(g));
     }
 }
